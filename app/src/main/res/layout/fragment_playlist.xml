@@ -3,22 +3,6 @@
 <TableLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:id="@+id/playlist_table"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cannonball"
-            android:id="@+id/song_title" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Damien Rice"
-            android:id="@+id/song_singer" />
-    </TableRow>
 </TableLayout>
