@@ -2,6 +2,7 @@ package me.nworks.nl.tento;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 
@@ -29,8 +30,13 @@ public class TentoFragmentActivity extends FragmentActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void onCreate(Bundle saveInstance) {
+        super.onCreate(saveInstance);
         actionBar = new TentoActionBar(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         actionBar.setTabListener(new ActionBar.TabListener() {
             @Override
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {

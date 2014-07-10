@@ -27,6 +27,7 @@ public class MenuFragmentActivity extends TentoFragmentActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        actionBar.setViewPager(mViewPager);
     }
 
     @Override
