@@ -1,33 +1,21 @@
 package me.nworks.nl.tento.fragments;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import me.nworks.nl.tento.MainActivity;
 import me.nworks.nl.tento.R;
-
-import static android.widget.AdapterView.OnItemClickListener;
 
 
 public class PlaylistFragment extends Fragment{
@@ -68,6 +56,14 @@ public class PlaylistFragment extends Fragment{
         listview.setAdapter(listadapter);
         listview.setOnItemClickListener(new ListViewItemClickListener());
 
+        Button btnPause = (Button) rootView.findViewById(R.id.btnPause);
+        btnPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mp.pause();
+            }
+        });
+
            while(cursor.moveToNext()) {
                list.add(cursor.getString(1)+" - "+ cursor.getString(2));
                path.add(cursor.getString(3));
@@ -79,10 +75,10 @@ public class PlaylistFragment extends Fragment{
         @Override
         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
             // TODO Auto-generated method stub
-            Log.d("aaa",String.valueOf(arg2)+"번째 : " + path.get(arg2));
             playSong(path.get(arg2));
         }
     }
+
 
     private void playSong(String path){
         try{
@@ -91,7 +87,6 @@ public class PlaylistFragment extends Fragment{
             mp.prepare();
             mp.start();
         }catch(Exception e){
-            Log.d("aaa",e.toString());
         }
     }
 }
