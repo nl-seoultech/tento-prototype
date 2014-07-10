@@ -58,6 +58,7 @@ public class MenuFragmentActivity extends FragmentActivity {
 }
 
 class MenuPagerAdapter extends FragmentStatePagerAdapter {
+
     public MenuPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -81,7 +82,7 @@ class MenuPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 100;
+        return 2;
     }
 }
 
