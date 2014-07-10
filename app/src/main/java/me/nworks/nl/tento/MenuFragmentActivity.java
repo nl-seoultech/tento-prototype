@@ -20,7 +20,8 @@ public class MenuFragmentActivity extends FragmentActivity implements ActionBar.
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
 
-    public void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         final ActionBar actionBar = getActionBar();

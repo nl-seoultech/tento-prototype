@@ -26,8 +26,6 @@ public class PlaylistFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        // The last two arguments ensure LayoutParams are inflated
-        // properly.
 
         View rootView = inflater.inflate(R.layout.fragment_playlist, container, false);
         Bundle args = getArguments();
