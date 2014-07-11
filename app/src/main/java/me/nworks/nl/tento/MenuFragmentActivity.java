@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import me.nworks.nl.tento.fragments.PlaylistFragment;
 
 
@@ -41,7 +43,7 @@ public class MenuFragmentActivity extends TentoFragmentActivity {
  * 아무 의미없는 더미 Fragment 내용 표시할만한게없을때 숫자로 프래그먼트를 채웁니다.
  */
 class DemoObjectFragment extends Fragment {
-    public static final String ARG_OBJECT = "object";
+    public static final String ARG_OBJECT = "position";
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -61,8 +63,17 @@ class DemoObjectFragment extends Fragment {
  */
 class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+    // Tab에 들어가는 Fragment를 담는 ArrayList
+    ArrayList<Fragment> fragments = new ArrayList<Fragment>();
+
     public SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
+        initFragments();
+    }
+
+    private void initFragments() {
+        fragments.add(new DemoObjectFragment());
+        fragments.add(new PlaylistFragment());
     }
 
     /**
@@ -72,27 +83,21 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
      */
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment = null;
-        switch (position) {
-            case 1: {
-                fragment = new PlaylistFragment();
-            };
-            break;
-            default: {
-                fragment = new DemoObjectFragment();
-                Bundle args = new Bundle();
-                args.putInt(DemoObjectFragment.ARG_OBJECT, position + 1);
-                fragment.setArguments(args);
-            }
-            ;
-            break;
+        // 만약에 이상한숫자가 들어온다면 0으로 position을 바꿈. 이거없으면 ArrayIndexOutOfBound 날수있음
+        if(position > fragments.size()) {
+            position = 0;
         }
-        ;
+
+        Fragment fragment = fragments.get(position);
+        Bundle args = new Bundle();
+        args.putInt("position", position + 1); // tab의 인덱스는 항상 position으로 Bundle에 넘김.
+        fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return fragments.size();
     }
 }
