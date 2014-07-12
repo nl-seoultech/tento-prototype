@@ -33,7 +33,9 @@ public class TentoFragmentActivity extends FragmentActivity {
     public void onCreate(Bundle saveInstance) {
         super.onCreate(saveInstance);
         actionBar = new TentoActionBar(this);
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

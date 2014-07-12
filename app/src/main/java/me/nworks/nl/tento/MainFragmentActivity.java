@@ -12,10 +12,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import me.nworks.nl.tento.fragments.NowPlayingFragment;
 import me.nworks.nl.tento.fragments.PlaylistFragment;
 
 
-public class MenuFragmentActivity extends TentoFragmentActivity {
+public class MainFragmentActivity extends TentoFragmentActivity {
 
     SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -24,12 +25,13 @@ public class MenuFragmentActivity extends TentoFragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.fragmentactivity_main);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         actionBar.setViewPager(mViewPager);
+
     }
 
     @Override
@@ -37,24 +39,6 @@ public class MenuFragmentActivity extends TentoFragmentActivity {
         mViewPager.setCurrentItem(i);
     }
 
-}
-
-/**
- * 아무 의미없는 더미 Fragment 내용 표시할만한게없을때 숫자로 프래그먼트를 채웁니다.
- */
-class DemoObjectFragment extends Fragment {
-    public static final String ARG_OBJECT = "position";
-
-    @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(
-                R.layout.fragment_collection_object, container, false);
-        Bundle args = getArguments();
-        ((TextView) rootView.findViewById(android.R.id.text1)).setText(
-                Integer.toString(args.getInt(ARG_OBJECT)));
-        return rootView;
-    }
 }
 
 
@@ -72,7 +56,7 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     private void initFragments() {
-        fragments.add(new DemoObjectFragment());
+        fragments.add(new NowPlayingFragment());
         fragments.add(new PlaylistFragment());
     }
 
