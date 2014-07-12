@@ -3,7 +3,6 @@ package me.nworks.nl.tento.fragments;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -12,9 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import java.util.ArrayList;
+
+import me.nworks.nl.tento.PlaySongService;
 import me.nworks.nl.tento.R;
 
 
@@ -22,7 +22,8 @@ public class PlaylistFragment extends Fragment{
 
     private ArrayList<String> list = new ArrayList<String>(); //음악 파일 목록을 담을 배열
     private ArrayList<String> path = new ArrayList<String>(); //음악 파일의 경로를 담을 배열
-    private MediaPlayer mp = new MediaPlayer(); //음악 플레이어
+
+    private PlaylistInterface pi;
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,14 +57,6 @@ public class PlaylistFragment extends Fragment{
         listview.setAdapter(listadapter);
         listview.setOnItemClickListener(new ListViewItemClickListener()); //리스트 클릭 이벤트
 
-        Button btnPause = (Button) rootView.findViewById(R.id.btnPause); //정지 버틈
-        btnPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mp.pause();
-            }
-        }); //정지 버튼 이벤트
-
            while(cursor.moveToNext()) {
                list.add(cursor.getString(1)+" - "+ cursor.getString(2));
                path.add(cursor.getString(3));
@@ -75,19 +68,19 @@ public class PlaylistFragment extends Fragment{
         @Override
         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
             // TODO Auto-generated method stub
-            playSong(path.get(arg2)); //재생 메서드에 선택된 음악 파일 경로 넘김.
+            PlaySongService.file = path.get(arg2);
+            pi.startSong(path.get(arg2));
 
         }
     }
 
+    public interface PlaylistInterface{ //MainFragmentActivity와 연결할 인터페이스
+        public void startSong(String path);
+    }
 
-    private void playSong(String path){
-        try{
-            mp.reset(); //플레이어 초기화
-            mp.setDataSource(path); //경로 설정
-            mp.prepare();
-            mp.start();
-        }catch(Exception e){
-        }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        pi = (PlaylistInterface)activity; //MainFragmentActivity와 인터페이스 연결
     }
 }

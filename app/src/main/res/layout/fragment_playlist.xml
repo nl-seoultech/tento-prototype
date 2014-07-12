@@ -10,14 +10,6 @@
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/listPlaylist"
-        android:layout_weight="1" />
+        android:id="@+id/listPlaylist"/>
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:text="@string/button_pause"
-        android:id="@+id/btnPause"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="9" />
 </LinearLayout>

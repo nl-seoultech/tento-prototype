@@ -1,14 +1,11 @@
 package me.nworks.nl.tento;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -16,12 +13,11 @@ import me.nworks.nl.tento.fragments.NowPlayingFragment;
 import me.nworks.nl.tento.fragments.PlaylistFragment;
 
 
-public class MainFragmentActivity extends TentoFragmentActivity {
+public class MainFragmentActivity extends TentoFragmentActivity implements PlaylistFragment.PlaylistInterface, NowPlayingFragment.NowPlayingInterface{
 
     SectionsPagerAdapter mSectionsPagerAdapter;
-
     ViewPager mViewPager;
-
+    Intent intent;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +35,21 @@ public class MainFragmentActivity extends TentoFragmentActivity {
         mViewPager.setCurrentItem(i);
     }
 
+    @Override
+    public void playpauseSong() { //NowPlayingFragment.NowPlayingInterface의 구련
+        intent = new Intent("tento.PlaySongService");
+        intent.putExtra("func",1);
+        startService(intent);
+    }
+
+    @Override
+    public void startSong(String path) { // PlaylistFragment.PlaylistInterface의 구현
+        intent = new Intent("tento.PlaySongService");
+        intent.putExtra("func",0);
+        intent.putExtra("path",path);
+        startService(intent);
+        tabSelected(0); //NowPlayingFragment로 이동
+    }
 }
 
 
@@ -56,6 +67,7 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     private void initFragments() {
+
         fragments.add(new NowPlayingFragment());
         fragments.add(new PlaylistFragment());
     }
