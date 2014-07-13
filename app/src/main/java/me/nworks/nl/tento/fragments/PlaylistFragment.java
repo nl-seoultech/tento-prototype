@@ -49,7 +49,7 @@ public class PlaylistFragment extends Fragment {
         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
             // TODO Auto-generated method stub
             String path = songStore.findSongByIndex(arg2).getPath();
-            PlaySongService.file = path;
+            PlaySongService.Title = path;
             pi.startSong(path); //재생 메서드에 선택된 음악 파일 경로 넘김.
         }
     }

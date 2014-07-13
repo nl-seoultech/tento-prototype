@@ -1,14 +1,16 @@
 package me.nworks.nl.tento;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-
 import java.util.ArrayList;
-
 import me.nworks.nl.tento.fragments.NowPlayingFragment;
 import me.nworks.nl.tento.fragments.PlaylistFragment;
 
@@ -17,7 +19,8 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
 
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
-    Intent intent;
+    Intent intent = new Intent("tento.PlaySongService");
+    NowPlayingFragment npf;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +30,11 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         actionBar.setViewPager(mViewPager);
+        npf =(NowPlayingFragment) mSectionsPagerAdapter.fragments.get(0);
 
+        if(PlaySongService.connect){ //액티비티가 종료되고 다시 켜진 경우 실행중인 서비스에 재연결.
+            connectService();
+        }
     }
 
     @Override
@@ -37,21 +44,50 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
 
     @Override
     public void playpauseSong() { //NowPlayingFragment.NowPlayingInterface의 구현
-        intent = new Intent("tento.PlaySongService");
         intent.putExtra("func", 1);
         startService(intent);
     }
 
     @Override
     public void startSong(String path) { // PlaylistFragment.PlaylistInterface의 구현
-        intent = new Intent("tento.PlaySongService");
+
+        connectService();
         intent.putExtra("func", 0);
         intent.putExtra("path", path);
         startService(intent);
+
+        npf.setSongInfo();  //NowPlayFragment 화면 갱신
+        npf.setbtnText(); //StatusChanged 인터페이스가 액티비티와 연결되는데 걸리는 시간보다 플레이어가 재생되는 시간이 더 빠르기 때문에 넣은 메서드.
         tabSelected(0); //NowPlayingFragment로 이동
     }
-}
 
+    public void connectService(){
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+    }
+    public PlaySongService ps;
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            PlaySongService.ServiceBinder binder = (PlaySongService.ServiceBinder)iBinder;
+            ps = binder.getService();
+            ps.registerInterface(sc);
+            PlaySongService.connect = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            PlaySongService.connect = false;
+            sc = null;
+        }
+
+       private PlaySongService.StatusChanged sc = new PlaySongService.StatusChanged() {
+            @Override
+            public void statuschanged(Boolean status) {
+                npf.statuschanged(status);
+            }
+        };
+    };
+}
 
 /**
  * Fragment를 ViewPager에 적용시키기위한 아답터.
@@ -67,7 +103,6 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     private void initFragments() {
-
         fragments.add(new NowPlayingFragment());
         fragments.add(new PlaylistFragment());
     }
@@ -96,4 +131,6 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return fragments.size();
     }
+
+
 }
