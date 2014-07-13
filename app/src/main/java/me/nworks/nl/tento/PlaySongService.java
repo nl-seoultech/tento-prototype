@@ -8,7 +8,8 @@ import android.os.IBinder;
 public class PlaySongService extends Service {
 
     public static MediaPlayer mp = new MediaPlayer();
-    public static String file="";
+    public static String file = "";
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -16,7 +17,7 @@ public class PlaySongService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        switch (intent.getIntExtra("func",0)){
+        switch (intent.getIntExtra("func", 0)){
             case 0:
                 startSong(intent.getStringExtra("path"));
                 break;

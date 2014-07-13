@@ -36,7 +36,7 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
     }
 
     @Override
-    public void playpauseSong() { //NowPlayingFragment.NowPlayingInterface의 구련
+    public void playpauseSong() { //NowPlayingFragment.NowPlayingInterface의 구현
         intent = new Intent("tento.PlaySongService");
         intent.putExtra("func", 1);
         startService(intent);
