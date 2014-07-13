@@ -2,7 +2,6 @@ package me.nworks.nl.tento;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 /** tento 프로토타입에 쓰이는 `ActionBar`를 정의하는 클래스

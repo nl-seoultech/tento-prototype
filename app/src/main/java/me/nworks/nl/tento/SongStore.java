@@ -75,8 +75,8 @@ public class SongStore {
 
     private Activity activity;
 
-    public SongStore(Activity activity) {
-        this.activity = activity;
+    public SongStore(Activity a) {
+        activity = a;
         initializeSongs(false);
     }
 
@@ -86,7 +86,7 @@ public class SongStore {
      * @param refresh 만약에 true이면 songs 에 노래 목록이 저장되있어도 초기화후 새로 저장합니다.
      */
     public void initializeSongs(boolean refresh) {
-        if(refresh || songs.isEmpty()) {
+        if(refresh || songs == null || songs.isEmpty()) {
             songs = new ArrayList<Song>();
             songIndexById = new HashMap<String, Integer>();
             songIndexByPath = new HashMap<String, Integer>();
@@ -99,7 +99,7 @@ public class SongStore {
                     MediaStore.Audio.Media.DISPLAY_NAME,
                     MediaStore.Audio.Media.DURATION
             };
-            ContentResolver resolver = this.activity.getContentResolver();
+            ContentResolver resolver = activity.getContentResolver();
             Cursor cursor = resolver.query(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     projection,

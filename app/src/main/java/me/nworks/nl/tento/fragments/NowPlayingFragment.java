@@ -12,7 +12,7 @@ import android.widget.TextView;
 import me.nworks.nl.tento.PlaySongService;
 import me.nworks.nl.tento.R;
 
-public class NowPlayingFragment extends Fragment implements View.OnClickListener{
+public class NowPlayingFragment extends Fragment implements View.OnClickListener {
 
     NowPlayingInterface npi;
     Button btnPause;

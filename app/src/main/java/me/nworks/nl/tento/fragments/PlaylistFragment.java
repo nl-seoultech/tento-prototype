@@ -10,19 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 
 import me.nworks.nl.tento.PlaySongService;
 import me.nworks.nl.tento.R;
 import me.nworks.nl.tento.SongStore;
 
-
-public class PlaylistFragment extends Fragment{
+public class PlaylistFragment extends Fragment {
 
     private PlaylistInterface pi;
 
-    private MediaPlayer mp = new MediaPlayer();
+    private MediaPlayer mp = new MediaPlayer();  //음악 플레이어
 
     private SongStore songStore;
 
@@ -33,24 +31,15 @@ public class PlaylistFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_playlist, container, false);
         Bundle args = getArguments();
         Activity activity = getActivity();
-        ContentResolver resolver = activity.getContentResolver();
         ArrayAdapter<String> listadapter; //Listview인 list와 list배열을 연결할 어댑터
         songStore = new SongStore(activity);
-        ListView listview = (ListView)rootView.findViewById(R.id.playlist_listview);
+        ListView listview = (ListView)rootView.findViewById(R.id.listPlaylist);
         listadapter = new ArrayAdapter<String>(
                 activity,
                 android.R.layout.simple_list_item_1,
                 songStore.getSongNames());
         listview.setAdapter(listadapter);
         listview.setOnItemClickListener(new ListViewItemClickListener()); //리스트 클릭 이벤트
-
-        Button btnPause = (Button) rootView.findViewById(R.id.btnPause);
-        btnPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mp.pause();
-            }
-        });
 
         return rootView;
     }
@@ -61,7 +50,7 @@ public class PlaylistFragment extends Fragment{
             // TODO Auto-generated method stub
             String path = songStore.findSongByIndex(arg2).getPath();
             PlaySongService.file = path;
-            pi.startSong(path);
+            pi.startSong(path); //재생 메서드에 선택된 음악 파일 경로 넘김.
         }
     }
 
