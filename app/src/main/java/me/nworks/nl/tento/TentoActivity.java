@@ -1,12 +1,10 @@
-package me.nworks.nl.tento.activities;
+package me.nworks.nl.tento;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
-
-import me.nworks.nl.tento.TentoActionBar;
 
 public class TentoActivity extends Activity {
 

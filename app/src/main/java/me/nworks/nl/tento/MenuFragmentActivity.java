@@ -1,4 +1,4 @@
-package me.nworks.nl.tento.activities;
+package me.nworks.nl.tento;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import me.nworks.nl.tento.R;
 import me.nworks.nl.tento.fragments.PlaylistFragment;
 
 
