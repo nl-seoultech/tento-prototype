@@ -8,17 +8,33 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.CheckBox;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class PlaySongService extends Service {
 
     public static MediaPlayer mp = new MediaPlayer();
-
     public static String Title=""; //음악 파일 이름
     public static Boolean connect = false;
     private StatusChanged sc;
+    private ServiceTimeTask  stimetask;
+    private Timer timer;
+
 
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                startTimer();
+            }
+        });
     }
 
     @Override
@@ -35,6 +51,7 @@ public class PlaySongService extends Service {
                 loopControl(intent.getBooleanExtra("state", false));
                 break;
         }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -45,6 +62,9 @@ public class PlaySongService extends Service {
             mp.prepare();
             mp.start();
             sc.statuschanged(true);
+            if(timer!=null){
+                cancelTimer();
+            }
         } catch(Exception e) {
         }
     }
@@ -53,10 +73,36 @@ public class PlaySongService extends Service {
         if(mp.isPlaying()){
             mp.pause();
             sc.statuschanged(false);
+            startTimer();
         }else{
             mp.start();
             sc.statuschanged(true);
+            cancelTimer();
         }
+    }
+
+    /**
+     * 음악 정지 혹은 종료시 1분 후 서비스 자동 종료
+     */
+    private class ServiceTimeTask extends TimerTask{
+
+        @Override
+        public void run() {
+            stopSelf();
+        }
+    }
+
+    private void startTimer(){
+
+        timer = new Timer();
+        stimetask = new ServiceTimeTask();
+        timer.schedule(stimetask, 60000);
+    }
+
+    private void cancelTimer(){
+        timer.cancel();
+        timer = null;
+        stimetask = null;
     }
 
     /**
@@ -82,5 +128,8 @@ public class PlaySongService extends Service {
     public void registerInterface(StatusChanged _sc){
         this.sc = _sc;
     }
+
 }
+
+
 

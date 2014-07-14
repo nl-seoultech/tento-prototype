@@ -78,6 +78,7 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
         npf.setSongInfo();  //NowPlayFragment 화면 갱신
         npf.setbtnText(); //StatusChanged 인터페이스가 액티비티와 연결되는데 걸리는 시간보다 플레이어가 재생되는 시간이 더 빠르기 때문에 넣은 메서드.
         tabSelected(0); //NowPlayingFragment로 이동
+
     }
 
     public void connectService(){
