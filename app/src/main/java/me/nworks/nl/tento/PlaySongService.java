@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.CheckBox;
 
 public class PlaySongService extends Service {
 
@@ -30,6 +31,9 @@ public class PlaySongService extends Service {
             case 1:
                 playpauseSong();
                 break;
+            case 2:
+                loopControl(intent.getBooleanExtra("state", false));
+                break;
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -41,9 +45,10 @@ public class PlaySongService extends Service {
             mp.prepare();
             mp.start();
             sc.statuschanged(true);
-        }catch(Exception e){
+        } catch(Exception e) {
         }
     }
+
     private void playpauseSong(){
         if(mp.isPlaying()){
             mp.pause();
@@ -53,6 +58,14 @@ public class PlaySongService extends Service {
             sc.statuschanged(true);
         }
     }
+
+    /**
+     * 체크 박스를 이용한 재생중인 음악 한곡 반복.
+     */
+    public void loopControl(boolean state){
+        mp.setLooping(state);
+    }
+
 
     public class ServiceBinder extends Binder{
         public PlaySongService getService(){
@@ -70,3 +83,4 @@ public class PlaySongService extends Service {
         this.sc = _sc;
     }
 }
+

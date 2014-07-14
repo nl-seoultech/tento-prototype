@@ -15,7 +15,7 @@ import me.nworks.nl.tento.fragments.NowPlayingFragment;
 import me.nworks.nl.tento.fragments.PlaylistFragment;
 
 
-public class MainFragmentActivity extends TentoFragmentActivity implements PlaylistFragment.PlaylistInterface, NowPlayingFragment.NowPlayingInterface{
+public class MainFragmentActivity extends TentoFragmentActivity implements PlaylistFragment.PlaylistInterface, NowPlayingFragment.NowPlayingInterface {
 
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -42,14 +42,33 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
         mViewPager.setCurrentItem(i);
     }
 
+    /**
+     * NowPlayingFragment.NowPlayingInterface의 구현
+     */
     @Override
-    public void playpauseSong() { //NowPlayingFragment.NowPlayingInterface의 구현
+    public void playpauseSong() {
         intent.putExtra("func", 1);
         startService(intent);
     }
 
+    /**
+     * NowPlayingFragment.loopControl 의 구현
+     */
     @Override
-    public void startSong(String path) { // PlaylistFragment.PlaylistInterface의 구현
+    public void loopControl(boolean state) {
+        intent.putExtra("func", 2);
+        intent.putExtra("state", state);
+        startService(intent);
+    }
+
+
+    /**
+     * PlaylistFragment.PlaylistInterface의 구현
+     *
+     * @param path mp3 파일의 경로
+     */
+    @Override
+    public void startSong(String path) {
 
         connectService();
         intent.putExtra("func", 0);
