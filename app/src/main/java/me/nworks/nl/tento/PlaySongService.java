@@ -43,12 +43,14 @@ public class PlaySongService extends Service {
             case 0:
                 startSong(intent.getStringExtra("path"));
                 break;
-
             case 1:
                 playpauseSong();
                 break;
             case 2:
                 loopControl(intent.getBooleanExtra("state", false));
+                break;
+            case 3:
+                seekTo(intent.getIntExtra("seekTo", 0));
                 break;
         }
 
@@ -110,6 +112,15 @@ public class PlaySongService extends Service {
      */
     public void loopControl(boolean state){
         mp.setLooping(state);
+    }
+
+    /**
+     * 노래 재생위치를 변경합니다
+     *
+     * @param pos 변경할 노래위치
+     */
+    public void seekTo(int pos) {
+        mp.seekTo(pos);
     }
 
 

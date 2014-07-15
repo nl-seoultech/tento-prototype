@@ -30,7 +30,7 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         actionBar.setViewPager(mViewPager);
-        npf =(NowPlayingFragment) mSectionsPagerAdapter.fragments.get(0);
+        npf = (NowPlayingFragment) mSectionsPagerAdapter.fragments.get(0);
 
         if(PlaySongService.connect){ //액티비티가 종료되고 다시 켜진 경우 실행중인 서비스에 재연결.
             connectService();
@@ -61,6 +61,13 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
         startService(intent);
     }
 
+    @Override
+    public void seekTo(int pos) {
+        intent.putExtra("func", 3);
+        intent.putExtra("seekTo", pos);
+        startService(intent);
+    }
+
 
     /**
      * PlaylistFragment.PlaylistInterface의 구현
@@ -77,6 +84,7 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
 
         npf.setSongInfo();  //NowPlayFragment 화면 갱신
         npf.setbtnText(); //StatusChanged 인터페이스가 액티비티와 연결되는데 걸리는 시간보다 플레이어가 재생되는 시간이 더 빠르기 때문에 넣은 메서드.
+        npf.updateProgressBar(); // 위 npf.setbtnText와 같은 이유.
         tabSelected(0); //NowPlayingFragment로 이동
 
     }
