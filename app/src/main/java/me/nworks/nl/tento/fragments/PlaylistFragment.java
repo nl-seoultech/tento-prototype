@@ -48,8 +48,10 @@ public class PlaylistFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
             // TODO Auto-generated method stub
-            String path = songStore.findSongByIndex(arg2).getPath();
+            SongStore.Song s = songStore.findSongByIndex(arg2);
+            String path = s.getPath();
             PlaySongService.Title = path;
+            PlaySongService.SongId = s.getId();
             pi.startSong(path); //재생 메서드에 선택된 음악 파일 경로 넘김.
         }
     }

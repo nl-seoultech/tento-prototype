@@ -3,8 +3,14 @@ package me.nworks.nl.tento;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,6 +35,8 @@ public class SongStore {
 
         // mp3 의 display 이름
         private String displayName;
+
+        private Bitmap artwork;
 
         // mp3의 길이
         private String duration;
@@ -65,6 +73,14 @@ public class SongStore {
         public String getDuration() {
             return duration;
         }
+
+        public void setArtwork(Bitmap bm) {
+            artwork = bm;
+        }
+
+        public Bitmap getArtwork() {
+            return artwork;
+        }
     }
 
     private static ArrayList<Song> songs;
@@ -74,6 +90,8 @@ public class SongStore {
     private static HashMap<String, Integer> songIndexByPath;
 
     private Activity activity;
+
+    private ContentResolver resolver;
 
     public SongStore(Activity a) {
         activity = a;
@@ -90,7 +108,7 @@ public class SongStore {
             songs = new ArrayList<Song>();
             songIndexById = new HashMap<String, Integer>();
             songIndexByPath = new HashMap<String, Integer>();
-            String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+            String selection = MediaStore.Audio.Media.IS_MUSIC + " = 1";
             String[] projection = {
                     MediaStore.Audio.Media._ID,
                     MediaStore.Audio.Media.ARTIST,
@@ -108,7 +126,21 @@ public class SongStore {
                     null);
 
             while(cursor.moveToNext()) {
-                songs.add(new Song(cursor));
+                Song s = new Song(cursor);
+                //TODO: 모든 노래 artwork 로딩하고있으므로 메모리 낭비가 있을듯. 필요할때 로딩하는게 괜찮지않을까.
+                Uri uri = Uri.parse("content://media/external/audio/media/" + s.getId() + "/albumart");
+                ParcelFileDescriptor pfd = null;
+                try {
+                    pfd = resolver.openFileDescriptor(uri, "r");
+                    if (pfd != null) {
+                        FileDescriptor fd = pfd.getFileDescriptor();
+                        Bitmap bm = BitmapFactory.decodeFileDescriptor(fd);
+                        s.setArtwork(bm);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                songs.add(s);
             }
 
             // 나중에 findSongByPath나 findSongById 같은걸 사용하기위해서 id와 path를 HashMap에 저장해놓습니다.

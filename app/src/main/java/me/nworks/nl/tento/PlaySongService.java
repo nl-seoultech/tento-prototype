@@ -14,12 +14,12 @@ import java.util.TimerTask;
 public class PlaySongService extends Service {
 
     public static MediaPlayer mp = new MediaPlayer();
-    public static String Title=""; //음악 파일 이름
+    public static String Title = ""; // 음악 파일 이름
+    public static String SongId; // 음악 파일에 부여되는 고유 ID  MediaStore.Audio.Media._ID
     public static Boolean connect = false;
     private StatusChanged sc;
     private ServiceTimeTask  stimetask;
     private Timer timer;
-
 
     @Override
     public IBinder onBind(Intent intent) {

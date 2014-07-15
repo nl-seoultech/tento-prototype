@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import me.nworks.nl.tento.PlaySongService;
 import me.nworks.nl.tento.R;
+import me.nworks.nl.tento.SongStore;
 
 public class NowPlayingFragment extends Fragment implements View.OnClickListener {
 
@@ -41,6 +43,8 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     private CheckBox checkboxRepeat;
 
+    private ImageView imgAlbumArt;
+
     private View rootView;
 
     @Override
@@ -51,6 +55,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         txtTitle =  (TextView) rootView.findViewById(R.id.txtTitle);
         btnPause = (Button) rootView.findViewById(R.id.btnPlayPause); //정지 버튼
         checkboxRepeat = (CheckBox) rootView.findViewById(R.id.checkboxRepeat);
+        imgAlbumArt = (ImageView) rootView.findViewById(R.id.imgAlbumArt);
 
         btnPause.setOnClickListener(this);
         checkboxRepeat.setOnClickListener(this);
@@ -103,7 +108,12 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
      * 음악 정보(앨범사진, 타이틀, 등등) 및 버튼 설정
      */
     public void setSongInfo() {
-        txtTitle.setText(PlaySongService.Title);
+        SongStore s = new SongStore(getActivity());
+        if(PlaySongService.SongId != null) {
+            SongStore.Song song = s.findSongById(PlaySongService.SongId);
+            imgAlbumArt.setImageBitmap(song.getArtwork());
+        }
+        txtTitle.setText(PlaySongService.Title); // song.getTitle() 해도 괜찮을듯
     }
 
     public void setbtnText() {
