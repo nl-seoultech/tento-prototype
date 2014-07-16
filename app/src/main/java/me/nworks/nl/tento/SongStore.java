@@ -81,9 +81,10 @@ public class SongStore {
         public Bitmap getArtwork() {
             return artwork;
         }
+
     }
 
-    private static ArrayList<Song> songs;
+    public static ArrayList<Song> songs;
 
     private static HashMap<String, Integer> songIndexById;
 
@@ -161,6 +162,18 @@ public class SongStore {
 
     public Song findSongByIndex(int i) {
         return songs.get(i);
+    }
+
+    public int findIndexById(String id) {
+        return songIndexById.get(id);
+    }
+
+    public Song findNextSongById(String id) {
+        int nextSongIndex = findIndexById(id) + 1;
+        if(nextSongIndex > songs.size()) {
+            return null;
+        }
+        return songs.get(nextSongIndex);
     }
 
     public ArrayList<String> getSongNames() {

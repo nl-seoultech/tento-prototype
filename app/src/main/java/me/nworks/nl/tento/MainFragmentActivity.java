@@ -68,6 +68,14 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
         startService(intent);
     }
 
+    @Override
+    public void changeSong(SongStore.Song song) {
+        intent.putExtra("id", song.getId());
+        intent.putExtra("path", song.getPath());
+        intent.putExtra("func", 4);
+        startService(intent);
+        npf.setSongInfo();
+    }
 
     /**
      * PlaylistFragment.PlaylistInterface의 구현

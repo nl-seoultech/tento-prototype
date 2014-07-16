@@ -39,6 +39,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
          */
         public void seekTo(int pos);
 
+        public void changeSong(SongStore.Song song);
     }
 
     /**
@@ -70,8 +71,14 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     private SeekBar seekbarSong;
 
+    private Button btnNextSong;
+
+    private Button btnPreviousSong;
+
     // UpdateProgressTime 를 관리하기위해서 사용하는 핸들러
     private Handler handler = new Handler();
+
+    private SongStore songStore;
 
     private UpdateProgressTime updateProgressTime = new UpdateProgressTime();
 
@@ -85,10 +92,15 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         checkboxRepeat = (CheckBox) rootView.findViewById(R.id.checkboxRepeat);
         imgAlbumArt = (ImageView) rootView.findViewById(R.id.imgAlbumArt);
         seekbarSong = (SeekBar) rootView.findViewById(R.id.seekbarSong);
+        btnNextSong = (Button) rootView.findViewById(R.id.btnNext);
+        btnPreviousSong = (Button) rootView.findViewById(R.id.btnPrev);
+        songStore = new SongStore(getActivity());
 
         btnPause.setOnClickListener(this);
         checkboxRepeat.setOnClickListener(this);
         seekbarSong.setOnSeekBarChangeListener(this);
+        btnNextSong.setOnClickListener(this);
+        btnPreviousSong.setOnClickListener(this);
 
         setSongInfo();
         if (PlaySongService.mp.isPlaying()) {
@@ -107,7 +119,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
      */
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btnPlayPause:
                 if(!PlaySongService.Title.isEmpty()){
                     npi.playpauseSong();
@@ -115,6 +127,17 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.checkboxRepeat:
                 npi.loopControl(checkboxRepeat.isChecked());
+                break;
+            case R.id.btnNext:
+                {
+                    SongStore.Song song = songStore.findNextSongById(PlaySongService.SongId);
+                    if(song != null) {
+                        npi.changeSong(song);
+                    }
+                }
+                break;
+            case R.id.btnPrev:
+                npi.changeSong(null);
                 break;
         }
     }
@@ -145,9 +168,9 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
      * 음악 정보(앨범사진, 타이틀, 등등) 및 버튼 설정
      */
     public void setSongInfo() {
-        SongStore s = new SongStore(getActivity());
+
         if(PlaySongService.SongId != null) {
-            SongStore.Song song = s.findSongById(PlaySongService.SongId);
+            SongStore.Song song = songStore.findSongById(PlaySongService.SongId);
             imgAlbumArt.setImageBitmap(song.getArtwork());
         }
         txtTitle.setText(PlaySongService.Title); // song.getTitle() 해도 괜찮을듯

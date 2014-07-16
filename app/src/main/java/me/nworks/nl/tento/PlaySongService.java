@@ -18,7 +18,7 @@ public class PlaySongService extends Service {
     public static String SongId; // 음악 파일에 부여되는 고유 ID  MediaStore.Audio.Media._ID
     public static Boolean connect = false;
     private StatusChanged sc;
-    private ServiceTimeTask  stimetask;
+    private ServiceTimeTask stimetask;
     private Timer timer;
 
     @Override
@@ -51,6 +51,9 @@ public class PlaySongService extends Service {
                 break;
             case 3:
                 seekTo(intent.getIntExtra("seekTo", 0));
+                break;
+            case 4:
+                changeSong(intent.getStringExtra("id"), intent.getStringExtra("path"));
                 break;
         }
 
@@ -123,6 +126,11 @@ public class PlaySongService extends Service {
         mp.seekTo(pos);
     }
 
+    public void changeSong(String id, String path) {
+        startSong(path);
+        SongId = id;
+        Title = path;
+    }
 
     public class ServiceBinder extends Binder{
         public PlaySongService getService(){
