@@ -39,6 +39,10 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
          */
         public void seekTo(int pos);
 
+        /**
+         * MainFragmentActivity에서 changeSong 을 연결하기 위해서 사용
+         * @param song
+         */
         public void changeSong(SongStore.Song song);
     }
 
@@ -61,11 +65,11 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     private Button btnPause;
 
-    private TextView txtTitle;
+    private static TextView txtTitle;
 
     private CheckBox checkboxRepeat;
 
-    private ImageView imgAlbumArt;
+    private static ImageView imgAlbumArt;
 
     private View rootView;
 
@@ -78,7 +82,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     // UpdateProgressTime 를 관리하기위해서 사용하는 핸들러
     private Handler handler = new Handler();
 
-    private SongStore songStore;
+    private static SongStore songStore;
 
     private UpdateProgressTime updateProgressTime = new UpdateProgressTime();
 
@@ -137,7 +141,10 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 }
                 break;
             case R.id.btnPrev:
-                npi.changeSong(null);
+                SongStore.Song song = songStore.findPrevSongById(PlaySongService.SongId);
+                if(song != null) {
+                    npi.changeSong(song);
+                }
                 break;
         }
     }
@@ -167,7 +174,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     /**
      * 음악 정보(앨범사진, 타이틀, 등등) 및 버튼 설정
      */
-    public void setSongInfo() {
+    public static void setSongInfo() {
 
         if(PlaySongService.SongId != null) {
             SongStore.Song song = songStore.findSongById(PlaySongService.SongId);

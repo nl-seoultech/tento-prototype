@@ -176,6 +176,14 @@ public class SongStore {
         return songs.get(nextSongIndex);
     }
 
+    public Song findPrevSongById(String id) {
+        int prevSongIndex = findIndexById(id) -1;
+        if(prevSongIndex < 0) {
+            return null;
+        }
+        return songs.get(prevSongIndex);
+    }
+
     public ArrayList<String> getSongNames() {
         ArrayList<String> names = new ArrayList<String>();
 

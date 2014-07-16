@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import me.nworks.nl.tento.fragments.NowPlayingFragment;
+
 public class PlaySongService extends Service {
 
     public static MediaPlayer mp = new MediaPlayer();
@@ -127,9 +129,10 @@ public class PlaySongService extends Service {
     }
 
     public void changeSong(String id, String path) {
-        startSong(path);
         SongId = id;
         Title = path;
+        NowPlayingFragment.setSongInfo();
+        startSong(path);
     }
 
     public class ServiceBinder extends Binder{
