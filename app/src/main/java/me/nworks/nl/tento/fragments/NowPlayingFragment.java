@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -192,12 +193,11 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
      * 음악 정보(앨범사진, 타이틀, 등등) 및 버튼 설정
      */
     public void setSongInfo() {
-
         if(PlaySongService.SongId != null) {
             SongStore.Song song = songStore.findSongById(PlaySongService.SongId);
             imgAlbumArt.setImageBitmap(song.getArtwork());
+            txtTitle.setText(song.getTitle());
         }
-        txtTitle.setText(PlaySongService.Title); // song.getTitle() 해도 괜찮을듯
     }
 
     public void setbtnText() {

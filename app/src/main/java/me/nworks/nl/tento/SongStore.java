@@ -170,7 +170,7 @@ public class SongStore {
 
     public Song findNextSongById(String id) {
         int nextSongIndex = findIndexById(id) + 1;
-        if(nextSongIndex > songs.size()) {
+        if(nextSongIndex > songs.size()-1) {
             return null;
         }
         return songs.get(nextSongIndex);

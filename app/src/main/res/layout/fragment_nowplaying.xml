@@ -1,101 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:paddingBottom="10dp">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="9">
 
         <ImageView
             android:id="@+id/imgAlbumArt"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="@drawable/ic_launcher"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"/>
+            android:layout_margin="10dp" />
 
-        <TextView
-            android:id="@+id/txtTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:layout_below="@id/imgAlbumArt"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/repeatAndEtc"
-        android:layout_above="@+id/underMenu">
-
-        <CheckBox
-            android:id="@+id/checkboxRepeat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Repeat"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/underMenu"
         android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true">
+        android:layout_weight="1">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="4">
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@id/imgAlbumArt"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="8"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkboxRepeat"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="Repeat"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_weight="8"
+                android:textSize="15dp" />
+
+            <SeekBar
+                android:id="@+id/seekbarSong"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="6" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="6"
+            android:layout_marginBottom="5dp">
 
             <Button
                 android:id="@+id/btnPrev"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:text="Prev" />
 
             <Button
                 android:id="@+id/btnPlayPause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
                 android:text="Play" />
 
             <Button
                 android:id="@+id/btnNext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
                 android:text="Next"/>
-
         </LinearLayout>
 
-        <SeekBar
-            android:id="@+id/seekbarSong"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
-
-</RelativeLayout>
+</LinearLayout>
