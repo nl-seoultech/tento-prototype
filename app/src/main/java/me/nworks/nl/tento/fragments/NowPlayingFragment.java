@@ -65,11 +65,11 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     private Button btnPause;
 
-    private static TextView txtTitle;
+    private TextView txtTitle;
 
     private CheckBox checkboxRepeat;
 
-    private static ImageView imgAlbumArt;
+    private ImageView imgAlbumArt;
 
     private View rootView;
 
@@ -82,7 +82,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     // UpdateProgressTime 를 관리하기위해서 사용하는 핸들러
     private Handler handler = new Handler();
 
-    private static SongStore songStore;
+    private SongStore songStore;
 
     private UpdateProgressTime updateProgressTime = new UpdateProgressTime();
 
@@ -141,9 +141,11 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 }
                 break;
             case R.id.btnPrev:
-                SongStore.Song song = songStore.findPrevSongById(PlaySongService.SongId);
-                if(song != null) {
-                    npi.changeSong(song);
+                {
+                    SongStore.Song song = songStore.findPrevSongById(PlaySongService.SongId);
+                    if (song != null) {
+                        npi.changeSong(song);
+                    }
                 }
                 break;
         }
@@ -151,17 +153,32 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     /**
      * MainFragmentActivity 의 sc ( PlaySongService.StatusChagned ) 구현에서 연결되는 메소드
-     * status 가 true 이면 재생중인 상태이고 false 이면 일시정지상태입니다.
+     * status 는 다음과 같은 상태로 정의됩니다.
+     *  - StatusChanged.PLAY : 재생중
+     *  - StatusChanged.PAUSE : 일시 정지중
+     *  - StatusChanged.CHANGE : 노래 변경
      *
-     * @param status
+     * @param status 다음 값중 하나를 가집니다. StatusChanged.PLAY, StatusChanged.PAUSE,
+     *               StatusChanged.CHANGE.
      */
-    public void statuschanged(Boolean status) {
-        if(status){
-            btnPause.setText("Pause");
-            updateProgressBar();
-        } else {
-            btnPause.setText("Play");
-            stopProgressBar();
+    public void statusChanged(int status) {
+        switch (status) {
+            case PlaySongService.StatusChanged.PAUSE: {
+                // 노래가 재생중이면 버튼은 "재생"이 되야함
+                btnPause.setText("Play");
+                stopProgressBar();
+            }
+            break;
+            case PlaySongService.StatusChanged.PLAY: {
+                // 노래가 재생중이면 버튼은 "일시정지"가 되야함
+                btnPause.setText("Pause");
+                updateProgressBar();
+            }
+            break;
+            case PlaySongService.StatusChanged.CHANGE: {
+                setSongInfo();
+            }
+            break;
         }
     }
 
@@ -174,7 +191,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     /**
      * 음악 정보(앨범사진, 타이틀, 등등) 및 버튼 설정
      */
-    public static void setSongInfo() {
+    public void setSongInfo() {
 
         if(PlaySongService.SongId != null) {
             SongStore.Song song = songStore.findSongById(PlaySongService.SongId);

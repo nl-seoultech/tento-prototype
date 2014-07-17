@@ -68,7 +68,7 @@ public class PlaySongService extends Service {
             mp.setDataSource(path); //경로 설정
             mp.prepare();
             mp.start();
-            sc.statuschanged(true);
+            sc.statusChanged(StatusChanged.PLAY);
             if(timer!=null){
                 cancelTimer();
             }
@@ -79,11 +79,11 @@ public class PlaySongService extends Service {
     private void playpauseSong(){
         if(mp.isPlaying()){
             mp.pause();
-            sc.statuschanged(false);
+            sc.statusChanged(StatusChanged.PAUSE);
             startTimer();
-        }else{
+        } else {
             mp.start();
-            sc.statuschanged(true);
+            sc.statusChanged(StatusChanged.PLAY);
             cancelTimer();
         }
     }
@@ -131,8 +131,8 @@ public class PlaySongService extends Service {
     public void changeSong(String id, String path) {
         SongId = id;
         Title = path;
-        NowPlayingFragment.setSongInfo();
         startSong(path);
+        sc.statusChanged(StatusChanged.CHANGE);
     }
 
     public class ServiceBinder extends Binder{
@@ -143,8 +143,18 @@ public class PlaySongService extends Service {
 
     private final IBinder binder = new ServiceBinder();
 
-    public interface StatusChanged{
-        public void statuschanged(Boolean status); //Playing = true; Pause = false
+    public interface StatusChanged {
+
+        // 재생중인 상태
+        public int PLAY = 0;
+
+        // 일시정지중인 상태
+        public int PAUSE = 1;
+
+        // 노래가 다음곡이나 이전곡 으로 바뀐 상태.
+        public int CHANGE = 2;
+
+        public void statusChanged(int status);
     }
 
     public void registerInterface(StatusChanged _sc){

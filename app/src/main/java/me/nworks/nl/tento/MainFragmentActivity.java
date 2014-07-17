@@ -74,6 +74,7 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
         intent.putExtra("path", song.getPath());
         intent.putExtra("func", 4);
         startService(intent);
+        npf.setSongInfo();
     }
 
     /**
@@ -116,11 +117,11 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
         }
 
        private PlaySongService.StatusChanged sc = new PlaySongService.StatusChanged() {
-            @Override
-            public void statuschanged(Boolean status) {
-                npf.statuschanged(status);
-            }
-        };
+           @Override
+           public void statusChanged(int status) {
+               npf.statusChanged(status);
+           }
+       };
     };
 }
 
