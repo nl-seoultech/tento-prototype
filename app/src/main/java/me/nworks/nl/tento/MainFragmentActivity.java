@@ -74,7 +74,6 @@ public class MainFragmentActivity extends TentoFragmentActivity implements Playl
         intent.putExtra("path", song.getPath());
         intent.putExtra("func", 4);
         startService(intent);
-        npf.setSongInfo();
     }
 
     /**
