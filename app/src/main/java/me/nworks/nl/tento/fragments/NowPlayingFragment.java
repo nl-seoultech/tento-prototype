@@ -185,6 +185,13 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 setSongInfo();
             }
             break;
+            case PlaySongService.StatusChanged.AUTO_NEXT: {
+                SongStore.Song song = songStore.findNextSongById(PlaySongService.SongId);
+                if(song != null) {
+                    npi.changeSong(song);
+                }
+            }
+            break;
         }
     }
 

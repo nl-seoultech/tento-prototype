@@ -35,6 +35,7 @@ public class PlaySongService extends Service {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 startTimer();
+                sc.statusChanged(StatusChanged.AUTO_NEXT);
             }
         });
     }
@@ -153,6 +154,9 @@ public class PlaySongService extends Service {
 
         // 노래가 다음곡이나 이전곡 으로 바뀐 상태.
         public int CHANGE = 2;
+
+        // 자동으로 다음 노래로 넘어가는 상태.
+        public int AUTO_NEXT = 3;
 
         public void statusChanged(int status);
     }
