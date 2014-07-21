@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +69,8 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     private CheckBox checkboxRepeat;
 
+    private CheckBox checkboxRandom;
+
     private ImageView imgAlbumArt;
 
     private View rootView;
@@ -95,6 +96,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         txtTitle =  (TextView) rootView.findViewById(R.id.txtTitle);
         btnPause = (Button) rootView.findViewById(R.id.btnPlayPause); //정지 버튼
         checkboxRepeat = (CheckBox) rootView.findViewById(R.id.checkboxRepeat);
+        checkboxRandom = (CheckBox) rootView.findViewById(R.id.checkboxRandom);
         imgAlbumArt = (ImageView) rootView.findViewById(R.id.imgAlbumArt);
         seekbarSong = (SeekBar) rootView.findViewById(R.id.seekbarSong);
         btnNextSong = (Button) rootView.findViewById(R.id.btnNext);
@@ -103,6 +105,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
         btnPause.setOnClickListener(this);
         checkboxRepeat.setOnClickListener(this);
+        checkboxRandom.setOnClickListener(this);
         seekbarSong.setOnSeekBarChangeListener(this);
         btnNextSong.setOnClickListener(this);
         btnPreviousSong.setOnClickListener(this);
@@ -118,7 +121,6 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     }
 
     /**
-     * TODO: previous, stop, next 버튼도 구현 예정
      *
      * @param view
      */
@@ -132,6 +134,9 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.checkboxRepeat:
                 npi.loopControl(checkboxRepeat.isChecked());
+                break;
+            case R.id.checkboxRandom:
+                songStore.setRandom(checkboxRandom.isChecked());
                 break;
             case R.id.btnNext:
                 {

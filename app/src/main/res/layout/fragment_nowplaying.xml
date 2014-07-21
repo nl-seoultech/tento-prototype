@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true">
 
     <LinearLayout
         android:orientation="vertical"
@@ -21,7 +21,6 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -50,6 +49,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:text="Repeat"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_weight="8"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkboxRandom"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="Random"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_weight="8"

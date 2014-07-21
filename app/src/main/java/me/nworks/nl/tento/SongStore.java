@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class SongStore {
@@ -94,6 +95,18 @@ public class SongStore {
 
     private ContentResolver resolver;
 
+    // 노래 랜덤 재생 상태
+    private static boolean random = false;
+
+    // 랜덤 재생 인덱스의 순서를 저장하는 리스트, 실제 songs 리스트는 그대로두고 이 리스트만 섞어서 랜덤 재생곡을 결정합니다.
+    private ArrayList<Integer> randomIndecies;
+
+    // findNextOrPrevRandomableIndexById 에서 이전곡을 찾아올때 사용하는 상수
+    private int INDEX_PREV = -1;
+
+    // findNextOrPrevRandomableIndexById 에서 다음곡을 찾아올때 사용하는 상수
+    private int INDEX_NEXT = 1;
+
     public SongStore(Activity a) {
         activity = a;
         initializeSongs(false);
@@ -168,19 +181,54 @@ public class SongStore {
         return songIndexById.get(id);
     }
 
-    public Song findNextSongById(String id) {
-        int nextSongIndex = findIndexById(id) + 1;
-        if(nextSongIndex > songs.size()-1) {
-            return null;
+    /**
+     * 랜덤 가능한 다음곡 또는 이전곡의 인덱스를 찾아옵니다.
+     *
+     * @param id 다음곡 혹은 이전곡을 찾을 곡의 고유 id
+     * @param prevOrNext 다음곡을 찾아올건지, 이전곡을 찾아올건지 결정하는 값. 이전곡일때는
+     *                   INDEX_PREV 의 값을 사용하여야하고, 다음곡일때는 INDEX_NEXT 값을 사용해야합니다.
+     * @return 다음곡 혹은 이전곡의 인덱스
+     */
+    public int findNextOrPrevRandomableIndexById(String id, int prevOrNext) {
+        int prevOrNextIndex;
+        int realIndex = findIndexById(id);
+
+        if(random) {
+            int currentRandomIndex = randomIndecies.indexOf(realIndex);
+            int i = indexCirculationCorrection(currentRandomIndex + prevOrNext);
+            prevOrNextIndex = randomIndecies.get(i);
+        } else {
+            prevOrNextIndex = indexCirculationCorrection(realIndex + prevOrNext);
+
         }
+
+        return prevOrNextIndex;
+    }
+
+    /**
+     * 다음곡이나 이전곡을 선택했을때, 유효한 범위안에 들어있지않다면 보정하여 노래 진행을 순환할 수 있도록 합니다.
+     * 마지막 곡의 다음곡은 첫번째곡으로 선정되며, 처음곡의 이전곡은 마지막 곡으로 선택됩니다.
+     *
+     * @param index 보정할 인덱스
+     * @return 보정된 인덱스. 마지막 곡 + 1의 인덱스는 처음곡으로, 처음곡 - 1의 인덱스는 마지막곡으로 바꿉니다.
+     */
+    public int indexCirculationCorrection(int index) {
+        int size = songs.size();
+        if(index >= size) {
+            index -= size;
+        } else if(index < 0) {
+            index += size;
+        }
+        return index;
+    }
+
+    public Song findNextSongById(String id) {
+        int nextSongIndex = findNextOrPrevRandomableIndexById(id, INDEX_NEXT);
         return songs.get(nextSongIndex);
     }
 
     public Song findPrevSongById(String id) {
-        int prevSongIndex = findIndexById(id) -1;
-        if(prevSongIndex < 0) {
-            return null;
-        }
+        int prevSongIndex = findNextOrPrevRandomableIndexById(id, INDEX_PREV);
         return songs.get(prevSongIndex);
     }
 
@@ -192,5 +240,17 @@ public class SongStore {
         }
 
         return names;
+    }
+
+    public void setRandom(boolean r) {
+        if(r) {
+            randomIndecies = new ArrayList<Integer>();
+
+            for(int i = 0; i < songs.size(); i++) {
+                randomIndecies.add(i);
+            }
+            Collections.shuffle(randomIndecies);
+        }
+        random = r;
     }
 }
