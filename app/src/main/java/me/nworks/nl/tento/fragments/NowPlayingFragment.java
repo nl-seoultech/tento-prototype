@@ -140,10 +140,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.btnNext:
                 {
-                    SongStore.Song song = songStore.findNextSongById(PlaySongService.SongId);
-                    if(song != null) {
-                        npi.changeSong(song);
-                    }
+                    changeNextSong();
                 }
                 break;
             case R.id.btnPrev:
@@ -186,10 +183,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
             }
             break;
             case PlaySongService.StatusChanged.AUTO_NEXT: {
-                SongStore.Song song = songStore.findNextSongById(PlaySongService.SongId);
-                if(song != null) {
-                    npi.changeSong(song);
-                }
+                changeNextSong();
             }
             break;
         }
@@ -201,6 +195,12 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         npi = (NowPlayingInterface)activity; //MainFragmentActivity와 인터페이스 연결
     }
 
+    public void changeNextSong() {
+        SongStore.Song song = songStore.findNextSongById(PlaySongService.SongId);
+        if(song != null) {
+            npi.changeSong(song);
+        }
+    }
     /**
      * 음악 정보(앨범사진, 타이틀, 등등) 및 버튼 설정
      */
