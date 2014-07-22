@@ -140,10 +140,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.btnNext:
                 {
-                    SongStore.Song song = songStore.findNextSongById(PlaySongService.SongId);
-                    if(song != null) {
-                        npi.changeSong(song);
-                    }
+                    changeNextSong();
                 }
                 break;
             case R.id.btnPrev:
@@ -186,10 +183,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
             }
             break;
             case PlaySongService.StatusChanged.AUTO_NEXT: {
-                SongStore.Song song = songStore.findNextSongById(PlaySongService.SongId);
-                if(song != null) {
-                    npi.changeSong(song);
-                }
+                changeNextSong();
             }
             break;
         }
@@ -199,6 +193,16 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         npi = (NowPlayingInterface)activity; //MainFragmentActivity와 인터페이스 연결
+    }
+
+    /**
+     * onClick과 statusChanged에서 쓰이는 부분의 중복 제거를 위해 만듦
+     */
+    public void changeNextSong() {
+        SongStore.Song song = songStore.findNextSongById(PlaySongService.SongId);
+        if(song != null) {
+            npi.changeSong(song);
+        }
     }
 
     /**
