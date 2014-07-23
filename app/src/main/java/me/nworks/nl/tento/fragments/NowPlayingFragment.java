@@ -142,19 +142,25 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
             case R.id.checkboxRandom:
                 {
                     songStore.setRandom(checkboxRandom.isChecked());
-                    songStore.setRandomFirstSong(PlaySongService.SongId);
+                    if(PlaySongService.SongId != null) {
+                        songStore.setRandomFirstSong(PlaySongService.SongId);
+                    }
                 }
                 break;
             case R.id.btnNext:
                 {
-                    changeNextSong();
+                    if(PlaySongService.SongId != null) {
+                        changeNextSong();
+                    }
                 }
                 break;
             case R.id.btnPrev:
                 {
-                    SongStore.Song song = songStore.findPrevSongById(PlaySongService.SongId);
-                    if (song != null) {
-                        npi.changeSong(song);
+                    if(PlaySongService.SongId != null) {
+                        SongStore.Song song = songStore.findPrevSongById(PlaySongService.SongId);
+                        if (song != null) {
+                            npi.changeSong(song);
+                        }
                     }
                 }
                 break;
