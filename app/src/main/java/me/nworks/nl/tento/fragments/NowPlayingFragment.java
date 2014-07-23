@@ -158,9 +158,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 {
                     if(PlaySongService.SongId != null) {
                         SongStore.Song song = songStore.findPrevSongById(PlaySongService.SongId);
-                        if (song != null) {
                             npi.changeSong(song);
-                        }
                     }
                 }
                 break;
@@ -213,10 +211,8 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
      */
     public void changeNextSong() {
         SongStore.Song song = songStore.findNextSongById(PlaySongService.SongId);
-        if(song != null) {
             if (!songStore.isLastSongById(PlaySongService.SongId) || checkboxRepeatAll.isChecked()) {
                 npi.changeSong(song);
-            }
         }
     }
 
