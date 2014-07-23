@@ -71,6 +71,8 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     private CheckBox checkboxRandom;
 
+    private CheckBox checkboxRepeatAll;
+
     private ImageView imgAlbumArt;
 
     private View rootView;
@@ -97,6 +99,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         btnPause = (Button) rootView.findViewById(R.id.btnPlayPause); //정지 버튼
         checkboxRepeat = (CheckBox) rootView.findViewById(R.id.checkboxRepeat);
         checkboxRandom = (CheckBox) rootView.findViewById(R.id.checkboxRandom);
+        checkboxRepeatAll = (CheckBox) rootView.findViewById(R.id.checkboxRepeatAll);
         imgAlbumArt = (ImageView) rootView.findViewById(R.id.imgAlbumArt);
         seekbarSong = (SeekBar) rootView.findViewById(R.id.seekbarSong);
         btnNextSong = (Button) rootView.findViewById(R.id.btnNext);
@@ -105,6 +108,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
         btnPause.setOnClickListener(this);
         checkboxRepeat.setOnClickListener(this);
+        checkboxRepeatAll.setOnClickListener(this);
         checkboxRandom.setOnClickListener(this);
         seekbarSong.setOnSeekBarChangeListener(this);
         btnNextSong.setOnClickListener(this);
@@ -136,7 +140,10 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                 npi.loopControl(checkboxRepeat.isChecked());
                 break;
             case R.id.checkboxRandom:
-                songStore.setRandom(checkboxRandom.isChecked());
+                {
+                    songStore.setRandom(checkboxRandom.isChecked());
+                    songStore.setRandomFirstSong(PlaySongService.SongId);
+                }
                 break;
             case R.id.btnNext:
                 {
@@ -201,7 +208,9 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
     public void changeNextSong() {
         SongStore.Song song = songStore.findNextSongById(PlaySongService.SongId);
         if(song != null) {
-            npi.changeSong(song);
+            if (!songStore.isLastSongById(PlaySongService.SongId) || checkboxRepeatAll.isChecked()) {
+                npi.changeSong(song);
+            }
         }
     }
 

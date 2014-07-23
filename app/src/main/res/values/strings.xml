@@ -5,4 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="button_pause">Pause</string>
+    <string name="repeat_once">한곡 반복</string>
+    <string name="random_play">무작위 재생</string>
+    <string name="repeat_all">전곡 반복</string>
 </resources>

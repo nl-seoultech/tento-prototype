@@ -199,7 +199,6 @@ public class SongStore {
             prevOrNextIndex = randomIndecies.get(i);
         } else {
             prevOrNextIndex = indexCirculationCorrection(realIndex + prevOrNext);
-
         }
 
         return prevOrNextIndex;
@@ -220,6 +219,17 @@ public class SongStore {
             index += size;
         }
         return index;
+    }
+
+    public boolean isLastSongById(String songId) {
+        Song lastSong;
+        if(random) {
+            int randomIndex  = randomIndecies.get(randomIndecies.size() - 1);
+            lastSong = songs.get(randomIndex);
+        } else {
+            lastSong = songs.get(songs.size() - 1);
+        }
+        return lastSong.getId().equals(songId);
     }
 
     public Song findNextSongById(String id) {
@@ -252,5 +262,22 @@ public class SongStore {
             Collections.shuffle(randomIndecies);
         }
         random = r;
+    }
+
+    /**
+     * 랜덤 재생 누를 시점에 노래를 랜덤 인덱스의 맨앞으로보내는 메소드.
+     *
+     * @param songId 현재 재생중인 노래 인덱스
+     */
+    public void setRandomFirstSong(String songId) {
+        int songIndex = songIndexById.get(songId);
+        int currentIndex = randomIndecies.indexOf(songIndex);
+        randomIndecies.remove(currentIndex);
+        ArrayList<Integer> newRandomIndecies = new ArrayList<Integer>();
+        newRandomIndecies.add(songIndex);
+        for(int i : randomIndecies) {
+            newRandomIndecies.add(i);
+        }
+        randomIndecies = newRandomIndecies;
     }
 }

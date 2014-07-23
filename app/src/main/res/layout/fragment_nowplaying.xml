@@ -48,9 +48,7 @@
                 android:id="@+id/checkboxRepeat"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:text="Repeat"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
+                android:text="@string/repeat_once"
                 android:layout_weight="8"
                 android:textSize="15dp" />
 
@@ -58,9 +56,16 @@
                 android:id="@+id/checkboxRandom"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:text="Random"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
+                android:text="@string/random_play"
+                android:layout_weight="8"
+                android:textSize="15dp" />
+
+            <CheckBox
+                android:id="@+id/checkboxRepeatAll"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="@string/repeat_all"
+                android:checked="true"
                 android:layout_weight="8"
                 android:textSize="15dp" />
 
