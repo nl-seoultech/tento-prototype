@@ -85,24 +85,31 @@
 
             <Button
                 android:id="@+id/btnPrev"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:text="Prev" />
 
             <Button
                 android:id="@+id/btnPlayPause"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:text="Play" />
 
             <Button
                 android:id="@+id/btnNext"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:text="Next"/>
+
+            <Button
+                android:id="@+id/btnAnalyze"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="Analyze"/>
         </LinearLayout>
 
     </LinearLayout>

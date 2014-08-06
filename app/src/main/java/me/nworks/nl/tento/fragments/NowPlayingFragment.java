@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import java.io.IOException;
+
 import me.nworks.nl.tento.PlaySongService;
 import me.nworks.nl.tento.R;
 import me.nworks.nl.tento.SongStore;
+import me.nworks.nl.tento.TentoAPI;
+import me.nworks.nl.tento.soundfile.CheapSoundFile;
 
 public class NowPlayingFragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener  {
 
@@ -65,6 +71,8 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
 
     private Button btnPause;
 
+    private Button btnAnalyze;
+
     private TextView txtTitle;
 
     private CheckBox checkboxRepeat;
@@ -97,6 +105,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         rootView = inflater.inflate(R.layout.fragment_nowplaying, container, false);
         txtTitle =  (TextView) rootView.findViewById(R.id.txtTitle);
         btnPause = (Button) rootView.findViewById(R.id.btnPlayPause); //정지 버튼
+        btnAnalyze = (Button) rootView.findViewById(R.id.btnAnalyze);
         checkboxRepeat = (CheckBox) rootView.findViewById(R.id.checkboxRepeat);
         checkboxRandom = (CheckBox) rootView.findViewById(R.id.checkboxRandom);
         checkboxRepeatAll = (CheckBox) rootView.findViewById(R.id.checkboxRepeatAll);
@@ -107,6 +116,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
         songStore = new SongStore(getActivity());
 
         btnPause.setOnClickListener(this);
+        btnAnalyze.setOnClickListener(this);
         checkboxRepeat.setOnClickListener(this);
         checkboxRepeatAll.setOnClickListener(this);
         checkboxRandom.setOnClickListener(this);
@@ -130,6 +140,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
      */
     @Override
     public void onClick(View view) {
+        if(PlaySongService.SongId == null) return;
         switch (view.getId()) {
             case R.id.btnPlayPause:
                 if(!PlaySongService.Title.isEmpty()){
@@ -162,8 +173,66 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
                     }
                 }
                 break;
+            case R.id.btnAnalyze:
+                postSongFrame();
+                break;
         }
     }
+    private void postSongFrame() {
+        mLoadingLastUpdateTime = System.currentTimeMillis();
+        final CheapSoundFile.ProgressListener listener = new CheapSoundFile.ProgressListener() {
+            public boolean reportProgress(double fractionComplete) {
+                long now = System.currentTimeMillis();
+                if (now - mLoadingLastUpdateTime > 100) {
+                    Log.d("hello", String.valueOf(fractionComplete));
+                    mLoadingLastUpdateTime = now;
+                }
+                return true;
+            }
+        };
+        final SongStore.Song song = songStore.findSongById(PlaySongService.SongId);
+        final String songPath = song.getPath();
+        new Thread() {
+            public void run() {
+                try {
+                    mSoundFile = CheapSoundFile.create(songPath, listener);
+
+                } catch (final Exception e) {
+                    e.printStackTrace();
+                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        finishLoadSoundFile();
+                    }
+                });
+            }
+        }.start();
+    }
+
+    private void finishLoadSoundFile() {
+        TentoAPI api = new TentoAPI();
+        CheapSoundFile my = mSoundFile;
+        String payload = "{\"frames\": [";
+        for(int f : mSoundFile.getFrameGains())  {
+            payload += String.valueOf(f) + ",";
+        }
+        payload += "]}";
+        api.postJSON("/analyze_songs/", payload, new TentoAPI.TentoCallback<String>() {
+            @Override
+            public void success(String result) {
+                Log.d("hello", result);
+            }
+
+            @Override
+            public void error(String message) {
+                Log.d("hello", message);
+            }
+        });
+    }
+
+    private long mLoadingLastUpdateTime;
+    private CheapSoundFile mSoundFile;
 
     /**
      * MainFragmentActivity 의 sc ( PlaySongService.StatusChagned ) 구현에서 연결되는 메소드
@@ -186,6 +255,7 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
             case PlaySongService.StatusChanged.PLAY: {
                 // 노래가 재생중이면 버튼은 "일시정지"가 되야함
                 btnPause.setText("Pause");
+                final SongStore.Song song = songStore.findSongById(PlaySongService.SongId);
                 updateProgressBar();
             }
             break;
@@ -211,8 +281,8 @@ public class NowPlayingFragment extends Fragment implements View.OnClickListener
      */
     public void changeNextSong() {
         SongStore.Song song = songStore.findNextSongById(PlaySongService.SongId);
-            if (!songStore.isLastSongById(PlaySongService.SongId) || checkboxRepeatAll.isChecked()) {
-                npi.changeSong(song);
+        if (!songStore.isLastSongById(PlaySongService.SongId) || checkboxRepeatAll.isChecked()) {
+            npi.changeSong(song);
         }
     }
 

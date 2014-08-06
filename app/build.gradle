@@ -22,4 +22,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:20.0.0'
+
+    compile group: 'com.squareup.okhttp', name: 'okhttp', version: '2.0.0'
 }
